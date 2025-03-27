@@ -40,8 +40,10 @@ web_app_dir = os.path.join(os.path.dirname(__file__), "my_web_app")
 # Mount the static directory
 app.mount("/static", StaticFiles(directory=os.path.join(web_app_dir, "static")), name="static")
 
-# Configure Jinja2 templates
-templates = Jinja2Templates(directory=os.path.join(web_app_dir, "templates"))
+# Configure Jinja2 templates with explicit path
+templates_dir = os.path.join(web_app_dir, "templates")
+templates = Jinja2Templates(directory=templates_dir)
+print(f"Templates directory: {templates_dir}")  # Debug output
 
 
 
@@ -59,6 +61,10 @@ async def home():
 @app.get("/base", response_class=HTMLResponse)
 async def read_base(request: Request):
     return templates.TemplateResponse("base.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+async def read_login(request: Request):
+    return templates.TemplateResponse("auth/login.html", {"request": request})
 
 
 
