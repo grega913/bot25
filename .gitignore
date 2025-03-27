@@ -182,3 +182,4 @@ src/my_web_app/node_modules/*
 src/my_web_app/static/js/firebase-config.js
 src/my_web_app/static/js/login-auth.js
 
+startAiderForBot25.cmd
