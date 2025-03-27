@@ -6,15 +6,21 @@ from contextlib import asynccontextmanager
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
+    
         ic("lifespan startup")
+
+        cred = credentials.Certificate("firebase_auth.json")
+        firebase_admin.initialize_app(cred)
+        ic("after firebase initialization")
+
         yield
-    finally:
-        await app.state.shutdown()
+        ic("lifespan shutdown")
 
 
 
@@ -26,11 +32,11 @@ from routes.routes_play import play_router
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
-app.include_router(stripe_router, prefix="/stripe", tags=["stripe"])
-app.include_router(websocket_router, prefix="/websocket", tags=["websocket"])
-app.include_router(basic_router, prefix="/basic", tags=["basic"])
-app.include_router(play_router, prefix="/play", tags=["play"])
+app.include_router(auth_router, tags=["auth"])
+app.include_router(stripe_router, tags=["stripe"])
+app.include_router(websocket_router, tags=["websocket"])
+app.include_router(basic_router,  tags=["basic"])
+app.include_router(play_router, tags=["play"])
 
 
 
@@ -39,6 +45,7 @@ web_app_dir = os.path.join(os.path.dirname(__file__), "my_web_app")
 
 # Mount the static directory
 app.mount("/static", StaticFiles(directory=os.path.join(web_app_dir, "static")), name="static")
+app.mount("/my_web_app", StaticFiles(directory=web_app_dir), name="my_web_app")
 
 # Configure Jinja2 templates with explicit path
 templates_dir = os.path.join(web_app_dir, "templates")
@@ -61,6 +68,7 @@ async def home():
 @app.get("/base", response_class=HTMLResponse)
 async def read_base(request: Request):
     return templates.TemplateResponse("base.html", {"request": request})
+
 
 @app.get("/login", response_class=HTMLResponse)
 async def read_login(request: Request):

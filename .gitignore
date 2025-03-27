@@ -172,3 +172,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+.aider*
+
+
+firebase_auth.json
+
+src/my_web_app/dist/*
+src/my_web_app/node_modules/*
+src/my_web_app/static/js/firebase-config.js
+src/my_web_app/static/js/login-auth.js
+

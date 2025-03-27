@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} Dash {% endblock %}
+
+
+<!-- This is a comment -->
+
+{% block navbar %}{% include 'basic/navbar_private.html' %}{% endblock %}
+
+
+{% block content %}
+    {% from "macros.html" import display_session_data %}
+
+    
+    <h2>Dashboard (Protected Page)</h2>
+    <p>This is a protected page that requires authentication to view.</p>
+    <p>Use this template to create and customize more protected pages for your app.</p>
+    <section>
+        {{ display_session_data(session_data=session_data) }}
+    </section>
+    
+
+{% endblock %}
+
+{% block bodyscripts %}
+{% endblock %}

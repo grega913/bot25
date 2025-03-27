@@ -1,0 +1,14 @@
+binance
+binance-connector
+requests
+schedule
+icecream 
+load_dotenv
+pymexc
+aider-chat
+fastapi[standard]
+fastapi-sessions
+uvicorn
+firebase_admin
+stripe
+prettyprinter
